@@ -1,3 +1,7 @@
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.sin
+
 fun getResourceAsText(path: String): String? =
     object {}.javaClass.getResource(path)?.readText()
 
@@ -50,5 +54,25 @@ data class Vec2(val col: Int, val row: Int){
     }
     operator fun times(scale: Int): Vec2 {
         return Vec2(this.col * scale, this.row*scale)
+    }
+
+    fun rotate(degrees: Double): Vec2 {
+
+        val radians = Math.toRadians(degrees)
+        return Vec2(
+            row = (sin(radians) * col + cos(radians) * row).roundToInt(),
+            col = (cos(radians) * col - sin(radians) * row).roundToInt()
+        )
+    }
+    fun turnRight(): Vec2 {
+        return this.rotate(90.0)
+    }
+
+    fun turnLeft(): Vec2 {
+        return this.rotate(-90.0)
+    }
+
+    fun turnAround(): Vec2 {
+        return this.rotate(180.0)
     }
 }
