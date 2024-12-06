@@ -4,11 +4,11 @@ import Vec2
 import day04.at
 import day04.inGrid
 import getResourceAsText
-import kotlin.time.measureTimedValue
+import kotlin.time.measureTime
 
 fun isLoop(grid: List<List<Char>>, extraBlock: Vec2, startPos: Vec2, startDir: Vec2 = Vec2.UP): Boolean {
 
-    val visited = mutableSetOf<Pair<Vec2, Vec2>>(Pair(startPos, startDir)) // Pos,Dir
+    val visitedTurns = mutableSetOf<Pair<Vec2, Vec2>>() // Pos,Dir
 
     var pos = startPos
     var dir = startDir
@@ -18,29 +18,41 @@ fun isLoop(grid: List<List<Char>>, extraBlock: Vec2, startPos: Vec2, startDir: V
         if(!grid.inGrid(nextPos)) return false
 
         if(grid.at(nextPos) == '#' || nextPos == extraBlock){
+
+            val lastMove = Pair(pos, dir)
+            if(visitedTurns.contains(lastMove)){
+                return true
+            }
+            visitedTurns.add(lastMove)
+
             dir = dir.turnRight()
             continue
         }
-
-        val nextMove = Pair(nextPos, dir)
-        if(visited.contains(nextMove)){
-            return true
-        }
-        visited.add(nextMove)
         pos = nextPos
     }
 }
 
-fun main(){
-    val text = getResourceAsText("/day06/input") ?: error("Input not found")
-
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
-
+fun bruteForceParallel(grid: List<List<Char>>){
     val startPos = findCharInGrid(grid, '^')
 
-    val allPositions = grid.indices.flatMap { rowIdx -> grid[rowIdx].indices.map { colIdx -> Vec2(colIdx, rowIdx) } }
-    val possibleBlocks = allPositions.parallelStream().filter { isLoop(grid, it, startPos) }.count()
+    val visitedTiles = findVisitedTiles(grid, startPos)
+    val possibleBlocks = visitedTiles.parallelStream().filter { isLoop(grid, it, startPos) }.count()
+    println("Possible Blocks (brute force - parallel): $possibleBlocks")
 
+}
 
-    println("Possible Blocks: $possibleBlocks")
+fun bruteForce(grid: List<List<Char>>){
+    val startPos = findCharInGrid(grid, '^')
+
+    val visitedTiles = findVisitedTiles(grid, startPos)
+    val possibleBlocks = visitedTiles.count { isLoop(grid, it, startPos) }
+    println("Possible Blocks (brute force): $possibleBlocks")
+}
+
+fun main(){
+    val text = getResourceAsText("/day06/input") ?: error("Input not found")
+    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
+
+    measureTime { bruteForce(grid) }.also { println("Brute force time (synchronous): ${it.inWholeMilliseconds}ms") }
+    measureTime { bruteForceParallel(grid) }.also { println("Brute force time (parallel): ${it.inWholeMilliseconds}ms") }
 }

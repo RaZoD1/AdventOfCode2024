@@ -4,6 +4,7 @@ import Vec2
 import day04.at
 import day04.inGrid
 import getResourceAsText
+import kotlin.time.measureTimedValue
 
 fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
     for((rowIdx, row) in grid.withIndex()){
@@ -14,22 +15,9 @@ fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
     error("Couldn't find char '$char' in grid")
 }
 
-fun charForDirection(dir: Vec2): Char = when{
-        dir.row > 0 -> 'v'
-        dir.row < 0 -> '^'
-        dir.col > 0 -> '>'
-        dir.col < 0 -> '<'
-        else -> error("No direction for $dir")
-    }
+fun findVisitedTiles(grid: List<List<Char>>, startPos: Vec2, startDir: Vec2 = Vec2.UP): Set<Vec2> {
 
-
-fun main(){
-    val text = getResourceAsText("/day06/input") ?: error("Input not found")
-
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toMutableList() }
-
-    val startPos = findCharInGrid(grid, '^')
-    val startDir = Vec2.UP
+    val visited = mutableSetOf<Pair<Vec2, Vec2>>(Pair(startPos, startDir)) // Pos,Dir
 
     var pos = startPos
     var dir = startDir
@@ -43,16 +31,28 @@ fun main(){
             continue
         }
 
-        if(grid.at(nextPos) == '.'){
-            grid[nextPos.row][nextPos.col] = charForDirection(dir)
-        } else if(grid.at(nextPos) == charForDirection(dir)){
-            println("Reached Loop")
-            break // loop
+        val nextMove = Pair(nextPos, dir)
+        if(visited.contains(nextMove)){
+            break
         }
+        visited.add(nextMove)
         pos = nextPos
     }
+    return visited.map { it.first }.toSet()
+}
 
-    val distinctVisitedTiles = grid.joinToString().count { "<>v^".contains(it) }
 
-    println("Visited Tiles: $distinctVisitedTiles")
+fun main(){
+    val text = getResourceAsText("/day06/input") ?: error("Input not found")
+
+    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toMutableList() }
+
+    val startPos = findCharInGrid(grid, '^')
+
+    val distinctVisitedTiles = measureTimedValue { findVisitedTiles(grid, startPos) }.let {
+        println("Time (Part 1): ${it.duration.inWholeMilliseconds}ms")
+        it.value
+    }
+
+    println("Visited Tiles: ${distinctVisitedTiles.size}")
 }
