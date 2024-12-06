@@ -48,4 +48,7 @@ data class Vec2(val col: Int, val row: Int){
     operator fun minus(v: Vec2): Vec2 {
         return Vec2(this.col - v.col, this.row - v.row)
     }
+    operator fun times(scale: Int): Vec2 {
+        return Vec2(this.col * scale, this.row*scale)
+    }
 }
