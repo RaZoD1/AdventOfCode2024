@@ -5,6 +5,7 @@ import day04.at
 import day04.inGrid
 import day08.Grid
 import getResourceAsText
+import kotlin.time.measureTime
 
 val DIRECTIONS = listOf(Vec2.UP, Vec2.DOWN, Vec2.RIGHT, Vec2.LEFT)
 
@@ -28,7 +29,6 @@ fun findAreas(grid: Grid): List<Set<Vec2>> {
             visited.add(pos)
         val plantType = grid.at(pos)
 
-        println("New Area with Type '$plantType' at $pos")
 
         val area = mutableSetOf<Vec2>()
         var toProcess = mutableSetOf<Vec2>(pos)
@@ -53,16 +53,19 @@ fun areaPerimeter(area: Set<Vec2>): Long {
     return area.sumOf { pos -> 4 - DIRECTIONS.map { it + pos }.count { it in area } }.toLong()
 }
 
-fun main() {
-    val text = getResourceAsText("/day12/input") ?: error("Input not found")
-
+fun solveLevel1(text: String) {
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
 
     val areas: List<Set<Vec2>> = findAreas(grid)
 
-    println("parsed Areas")
-
     val totalPrice = areas.sumOf { area -> areaPerimeter(area)* area.size }
 
-    println("Total price: $totalPrice")
+    println("Total price (part1): $totalPrice")
+}
+
+fun main() {
+    val text = getResourceAsText("/day12/input") ?: error("Input not found")
+    measureTime { solveLevel1(text) }.also {
+        println("Time: $it")
+    }
 }
