@@ -10,7 +10,7 @@ import kotlin.time.measureTime
 val DIRECTIONS = listOf(Vec2.UP, Vec2.DOWN, Vec2.RIGHT, Vec2.LEFT)
 
 
-inline fun Grid.forEachCell(action: ((Vec2)-> Unit)): Unit {
+fun Grid.forEachCell(action: ((Vec2)-> Unit)): Unit {
     for(row in this.indices){
         for(col in this[row].indices){
             action(Vec2(col, row))

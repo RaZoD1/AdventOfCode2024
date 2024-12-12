@@ -1,38 +1,36 @@
 package day11
 
 import getResourceAsText
+import kotlin.math.log10
 import kotlin.time.measureTime
 
 val STEPS = 75
 
+val cache = mutableMapOf<Pair<Long, Int>, Long>()
 
-val cache = mutableMapOf<Pair<Int, Long>, Long>()
 fun calculateStonesAfterBlinksFor(stone: Long, steps: Int): Long {
-    if(steps == 0) return 1
-    if(cache.contains(Pair(steps, stone))) return cache[Pair(steps, stone)]!!
+    if (steps == 0) return 1
 
-    if(stone == 0L){
-        return calculateStonesAfterBlinksFor(1L, steps - 1).also { if (!cache.containsKey(Pair(steps - 1, 1L))) cache[Pair(steps - 1, 1L)] = it }
-    }else if(stone.toString().length % 2 == 0){
-        stone.toString().also {
-            val stone1 = it.substring(0..<it.length / 2).toLong()
-            val stone2 = it.substring((it.length / 2)..<it.length).toLong()
+    // Retrieve from cache if available
+    return cache.getOrPut(Pair(stone, steps)) {
+        when {
+            stone == 0L -> calculateStonesAfterBlinksFor(1L, steps - 1)
+            numDigits(stone) % 2 == 0 -> {
+                val (stone1, stone2) = splitNumberArithmetic(stone)
 
-            val count1 = calculateStonesAfterBlinksFor(stone1, steps - 1).also { if (!cache.containsKey(Pair(steps - 1, stone1))) cache[Pair(steps - 1, stone1)] = it }
-            val count2 = calculateStonesAfterBlinksFor(stone2, steps - 1).also { if (!cache.containsKey(Pair(steps - 1, stone2))) cache[Pair(steps - 1, stone2)] = it }
-
-            return count1 + count2
-
+                calculateStonesAfterBlinksFor(stone1, steps - 1) +
+                        calculateStonesAfterBlinksFor(stone2, steps - 1)
+            }
+            else -> calculateStonesAfterBlinksFor(stone * 2024L, steps - 1)
         }
-    } else {
-        return calculateStonesAfterBlinksFor(stone * 2024L, steps - 1).also { if (!cache.containsKey(Pair(steps - 1, stone * 2024L))) cache[Pair(steps - 1, stone * 2024L)] = it }
     }
 }
 
-fun solveLevel2(){
-    val text = getResourceAsText("/day11/input") ?: error("Input not found")
+fun numDigits(n: Long): Int {
+    return if (n == 0L) 1 else  log10(n.toDouble()).toInt() + 1
+}
 
-
+fun solveLevel2(text: String) {
     val stones = text.replace("\n", "").split(" ").map { it.toLong() }
 
     val amountOfStones = stones.sumOf { calculateStonesAfterBlinksFor(it, STEPS) }
@@ -42,5 +40,6 @@ fun solveLevel2(){
 }
 
 fun main() {
-    measureTime { solveLevel2() }.also { println("Time taken (part2): ${it.inWholeMilliseconds}ms") }
+    val text = getResourceAsText("/day11/input") ?: error("Input not found")
+    measureTime { solveLevel2(text) }.also { println("Time taken (part2): ${it}") }
 }
