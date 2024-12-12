@@ -31,9 +31,9 @@ fun findAreas(grid: Grid): List<Set<Vec2>> {
         println("New Area with Type '$plantType' at $pos")
 
         val area = mutableSetOf<Vec2>()
-        var toProcess = mutableListOf<Vec2>(pos)
+        var toProcess = mutableSetOf<Vec2>(pos)
         while(toProcess.isNotEmpty()){
-            val nextToProcess = mutableListOf<Vec2>()
+            val nextToProcess = mutableSetOf<Vec2>()
             for(p in toProcess){
                 visited.add(p)
                 area.add(p)
