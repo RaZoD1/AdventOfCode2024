@@ -23,7 +23,7 @@ fun splitNumberArithmetic(number: Long): Pair<Long, Long> {
     return Pair(firstPart, secondPart)
 }
 
-fun bench() {
+fun main() {
     val numbers = listOf(2040L, 123456L, 98765432L, 1234567890L, 112233445566L)
 
     val stringMethodTime = measureTime {
