@@ -1,12 +1,15 @@
 package day13
 
 import LVec2
+import day14.solveLevel2
 import getInput
 import org.jetbrains.kotlinx.multik.api.linalg.solve
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.api.ndarray
 import org.jetbrains.kotlinx.multik.ndarray.operations.map
 import org.jetbrains.kotlinx.multik.ndarray.operations.toList
+import runLevels
+import kotlin.math.min
 import kotlin.math.roundToLong
 import kotlin.time.measureTime
 
@@ -51,19 +54,21 @@ data class ClawMachine(val btnA: LVec2, val btnB: LVec2, val prize: LVec2) {
     }
 }
 
-fun solveLevel1(clawMachines: List<ClawMachine>) {
+fun solveLevel1(clawMachines: List<ClawMachine>): Long {
     val minimumTotalAmountOfTokens = clawMachines.sumOf { it.findMinimumAmountOfTokens() }
 
     println("Min. total amount of Tokens (part1): $minimumTotalAmountOfTokens")
+    return minimumTotalAmountOfTokens
 }
 
 const val CONVERSION_ERROR = 10000000000000
-fun solveLevel2(clawMachines: List<ClawMachine>) {
+fun solveLevel2(clawMachines: List<ClawMachine>): Long {
     val minimumTotalAmountOfTokens = clawMachines
         .map { it.copy(prize = it.prize + LVec2(CONVERSION_ERROR, CONVERSION_ERROR)) }
         .sumOf { it.findMinimumAmountOfTokens() }
 
     println("Min. total amount of Tokens (part2): $minimumTotalAmountOfTokens")
+    return minimumTotalAmountOfTokens
 }
 
 fun main() {
@@ -71,11 +76,6 @@ fun main() {
     val clawMachines = text.split("\n\n").filter { it.isNotEmpty() }.map {
         ClawMachine.parse(it)
     }
-    measureTime { solveLevel1(clawMachines) }.also {
-        println("Time (part1): $it")
-    }
-    measureTime { solveLevel2(clawMachines) }.also {
-        println("Time (part2): $it")
-    }
+    runLevels(13, { solveLevel1(clawMachines) }, { solveLevel2(clawMachines) })
 }
 

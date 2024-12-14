@@ -1,9 +1,10 @@
 package day01
 
 import getInput
+import runLevels
 import kotlin.math.abs
 
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
 
     val list1 = mutableListOf<Int>()
     val list2 = mutableListOf<Int>()
@@ -26,9 +27,10 @@ fun solveLevel1(text: String) {
     }
 
     println("Sum: $differenceSum")
+    return differenceSum.toLong()
 }
 
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val list1 = mutableListOf<Int>()
     val list2 = mutableListOf<Int>()
 
@@ -49,10 +51,10 @@ fun solveLevel2(text: String) {
     }
 
     println("Similarity Score: $similarityScore")
+    return similarityScore.toLong()
 }
 
 fun main() {
     val text = getInput(1)
-    solveLevel1(text)
-    solveLevel2(text)
+    runLevels(1, { solveLevel1(text) }, { solveLevel2(text) })
 }

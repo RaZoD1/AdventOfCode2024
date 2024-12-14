@@ -1,6 +1,7 @@
 package day05
 
 import getInput
+import runLevels
 
 
 fun checkUpdateOrder(allRules: List<Pair<Int, Int>>, pages: List<Int>): Boolean {
@@ -20,7 +21,7 @@ fun checkUpdateOrder(allRules: List<Pair<Int, Int>>, pages: List<Int>): Boolean 
     return true
 }
 
-fun solveLevel1(rules: List<Pair<Int, Int>>, updates: List<List<Int>>) {
+fun solveLevel1(rules: List<Pair<Int, Int>>, updates: List<List<Int>>): Long {
     val result = updates.sumOf { update ->
         if (checkUpdateOrder(rules, update))
             update[update.size / 2]
@@ -28,6 +29,7 @@ fun solveLevel1(rules: List<Pair<Int, Int>>, updates: List<List<Int>>) {
     }
 
     println("Result: $result")
+    return result.toLong()
 }
 
 fun fixUpdateOrder(allRules: List<Pair<Int, Int>>, pages: List<Int>): List<Int> {
@@ -41,7 +43,7 @@ fun fixUpdateOrder(allRules: List<Pair<Int, Int>>, pages: List<Int>): List<Int> 
     return orderedPages
 }
 
-fun solveLevel2(rules: List<Pair<Int, Int>>, updates: List<List<Int>>) {
+fun solveLevel2(rules: List<Pair<Int, Int>>, updates: List<List<Int>>): Long {
     val result = updates.sumOf { update ->
         if (checkUpdateOrder(rules, update))
             0
@@ -51,6 +53,7 @@ fun solveLevel2(rules: List<Pair<Int, Int>>, updates: List<List<Int>>) {
     }
 
     println("Result: $result")
+    return result.toLong()
 }
 
 fun main() {
@@ -65,6 +68,5 @@ fun main() {
     val updates = text.split("\n\n").last().split("\n").filter { it.isNotEmpty() }
         .map { line -> line.split(",").map { it.toInt() } }
 
-    solveLevel1(rules, updates)
-    solveLevel2(rules, updates)
+    runLevels(5, {solveLevel1(rules, updates)}, { solveLevel2(rules, updates) })
 }

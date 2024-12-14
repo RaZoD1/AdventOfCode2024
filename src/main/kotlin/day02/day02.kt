@@ -1,6 +1,7 @@
 package day02
 
 import getInput
+import runLevels
 import kotlin.math.sign
 
 fun isReportValid(report: List<Int>): Boolean {
@@ -29,16 +30,18 @@ fun isReportValidWithDampener(report: List<Int>): Boolean {
 
 }
 
-fun solveLevel1(reports: List<List<Int>>) {
+fun solveLevel1(reports: List<List<Int>>): Long {
     val validReports = reports.filter { isReportValid(it) }
 
     println("Amount of valid reports: ${validReports.size}")
+    return validReports.size.toLong()
 }
 
-fun solveLevel2(reports: List<List<Int>>) {
+fun solveLevel2(reports: List<List<Int>>): Long {
     val validReports = reports.filter { isReportValidWithDampener(it) }
 
     println("Amount of valid reports (with dampener): ${validReports.size}")
+    return validReports.size.toLong()
 }
 
 fun main() {
@@ -47,6 +50,5 @@ fun main() {
     val reports = text.split("\n").filter { it.isNotEmpty() }.map {
         it.split(" ").map { it.toInt() }
     }
-    solveLevel1(reports)
-    solveLevel2(reports)
+    runLevels(2, { solveLevel1(reports) }, { solveLevel2(reports) })
 }

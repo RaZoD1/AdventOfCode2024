@@ -1,13 +1,13 @@
 package day11
 
 import getInput
+import runLevels
 import kotlin.math.log10
-import kotlin.time.measureTime
 
 // import java.util.LinkedList
 
 
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
     // val list = LinkedList<Long>()
     val list = mutableListOf<Long>()
     list.addAll(text.replace("\n", "").split(" ").map { it.toLong() })
@@ -35,12 +35,13 @@ fun solveLevel1(text: String) {
             }
         }
 
-        println("Amount of stones after ${step + 1} steps: ${list.size}")
+        // println("Amount of stones after ${step + 1} steps: ${list.size}")
     }
 
     val stoneCount = list.size
 
     println("Number of stones: $stoneCount")
+    return stoneCount.toLong()
 }
 
 val STEPS = 75
@@ -70,19 +71,17 @@ fun numDigits(n: Long): Int {
     return if (n == 0L) 1 else log10(n.toDouble()).toInt() + 1
 }
 
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val stones = text.replace("\n", "").split(" ").map { it.toLong() }
 
     val amountOfStones = stones.sumOf { calculateStonesAfterBlinksFor(it, STEPS) }
 
     println("Amount of Stones: $amountOfStones")
     println("Cache size: ${cache.size}")
+    return amountOfStones
 }
 
 fun main() {
     val text = getInput(11)
-
-    solveLevel1(text)
-    measureTime { solveLevel2(text) }.also { println("Time taken (part2): ${it}") }
-
+    runLevels(11, { solveLevel1(text) }, { cache.clear(); solveLevel2(text) })
 }

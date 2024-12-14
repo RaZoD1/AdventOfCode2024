@@ -3,6 +3,7 @@ package day14
 import Vec2
 import getInput
 import plotVec2s
+import runLevels
 import kotlin.time.measureTime
 
 
@@ -50,16 +51,16 @@ fun groupByQuads(robots: List<Robot>): Map<Int, List<Robot>> {
     }
 }
 
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
     val robots = text.split("\n").map { Robot.parse(it) }
     robots.forEach { robot -> repeat(100) { robot.takeStep() } }
     val quads = groupByQuads(robots)
-    println(robots.joinToString("\n"))
     val safetyScore = (1..4).fold(1) { mult, quad ->
-        mult * quads.getOrElse(quad) { emptyList() }.also { println("Quad $quad contains ${it.size} robots") }.size
+        mult * quads.getOrElse(quad) { emptyList() }.size
     }
 
     println("Safety Score: $safetyScore")
+    return safetyScore.toLong()
 }
 
 fun mayContainTree(robots: List<Robot>): Boolean {
@@ -72,7 +73,7 @@ fun printRobots(robots: List<Robot>) {
 }
 
 
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val robots = text.split("\n").map { Robot.parse(it) }
 
     var secs = 0
@@ -82,9 +83,9 @@ fun solveLevel2(text: String) {
             robot.takeStep()
         }
         if (mayContainTree(robots)) {
-            printRobots(robots)
+            //printRobots(robots)
             println(secs)
-            break
+            return secs.toLong()
         }
     }
 }
@@ -93,8 +94,7 @@ const val USE_SAMPLE = false
 val SIZE = if (USE_SAMPLE) Vec2(col = 11, row = 7) else Vec2(101, 103)
 fun main() {
     val text = getInput(14, sample = USE_SAMPLE)
-    measureTime { solveLevel1(text) }.also {
-        println("Time: $it")
-    }
-    solveLevel2(text)
+
+    runLevels(14, {solveLevel1(text)}, {solveLevel2(text)}, times = 1)
+
 }

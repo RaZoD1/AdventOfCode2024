@@ -1,9 +1,10 @@
 package day03
 
 import getInput
+import runLevels
 
 val multiplicationRegex = Regex("""mul\([0-9]{1,3},[0-9]{1,3}\)""", RegexOption.MULTILINE)
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
     val multiplications = multiplicationRegex.findAll(text)
 
     val sum = multiplications.sumOf { multMatch ->
@@ -16,11 +17,12 @@ fun solveLevel1(text: String) {
     }
 
     println("Sum of multiplications: $sum")
+    return sum
 }
 
 
 val instructionsRegex = Regex("""(mul\([0-9]{1,3},[0-9]{1,3}\))|(do\(\))|(don't\(\))""", RegexOption.MULTILINE)
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val instructions = instructionsRegex.findAll(text)
 
     var mulActive = true
@@ -46,11 +48,11 @@ fun solveLevel2(text: String) {
 
     }
     println("Sum of multiplications: $sum")
+    return sum
 }
 
 
 fun main() {
     val text = getInput(3)
-    solveLevel1(text)
-    solveLevel2(text)
+    runLevels(3, { solveLevel1(text) }, { solveLevel2(text) })
 }

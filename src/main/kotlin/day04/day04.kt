@@ -3,6 +3,7 @@ package day04
 import Vec2
 import day08.Grid
 import getInput
+import runLevels
 
 val DIRECTIONS = listOf<Vec2>(
     Vec2.UP,
@@ -29,7 +30,7 @@ fun <T> List<List<T>>.at(pos: Vec2): T {
     return this[pos.row][pos.col]!!
 }
 
-fun solveLevel1(grid: Grid) {
+fun solveLevel1(grid: Grid): Long {
     var xmasCount = 0
 
     for (rowIdx in grid.indices) {
@@ -52,6 +53,7 @@ fun solveLevel1(grid: Grid) {
     }
 
     println("Amount of XMAS: $xmasCount")
+    return xmasCount.toLong()
 }
 
 
@@ -59,7 +61,7 @@ val DIAG_DIRECTIONS = listOf(Vec2.UP_LEFT, Vec2.UP_RIGHT, Vec2.DOWN_LEFT, Vec2.D
 
 fun msToggle(c: Char): Char = if (c == 'M') 'S' else 'M'
 
-fun solveLevel2(grid: Grid) {
+fun solveLevel2(grid: Grid): Long {
     var xmasCount = 0
 
     for (rowIdx in grid.indices) {
@@ -85,7 +87,7 @@ fun solveLevel2(grid: Grid) {
     }
 
     println("Amount of X-MAS: $xmasCount")
-
+    return xmasCount.toLong()
 }
 
 fun main() {
@@ -93,6 +95,6 @@ fun main() {
 
     val grid = text.split("\n").map { it.toCharArray().toList() }
 
-    solveLevel1(grid)
-    solveLevel2(grid)
+    runLevels(4, { solveLevel1(grid) }, { solveLevel2(grid) })
+
 }

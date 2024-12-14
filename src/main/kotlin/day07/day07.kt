@@ -1,6 +1,7 @@
 package day07
 
 import getInput
+import runLevels
 import kotlin.time.measureTimedValue
 
 
@@ -45,7 +46,7 @@ fun isCalculationFixableWithConcat(result: Long, numbers: List<Long>): Boolean {
     return false
 }
 
-fun solveLevel1(calculations: Map<Long, List<Long>>) {
+fun solveLevel1(calculations: Map<Long, List<Long>>): Long {
     val result = measureTimedValue {
         calculations.filter { (result, numbers) ->
             isCalculationFixable(
@@ -59,9 +60,10 @@ fun solveLevel1(calculations: Map<Long, List<Long>>) {
     }
 
     println("Fixable calculations sum: $result")
+    return result
 }
 
-fun solveLevel2(calculations: Map<Long, List<Long>>) {
+fun solveLevel2(calculations: Map<Long, List<Long>>): Long {
     val result = measureTimedValue {
         calculations.filter { (result, numbers) ->
             isCalculationFixableWithConcat(
@@ -75,6 +77,7 @@ fun solveLevel2(calculations: Map<Long, List<Long>>) {
     }
 
     println("Fixable calculations sum: $result")
+    return result
 }
 
 fun main() {
@@ -89,6 +92,5 @@ fun main() {
                 .map { it.toLong() })
     }
 
-    solveLevel1(calculations)
-
+    runLevels(7, { solveLevel1(calculations) }, { solveLevel2(calculations) })
 }

@@ -1,8 +1,11 @@
-import java.time.LocalDate
-
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinxSerialization)
+    kotlin("jvm") version "2.1.0"
+}
+
+sourceSets {
+    main {
+        kotlin.srcDir("src")
+    }
 }
 
 repositories {
@@ -11,41 +14,19 @@ repositories {
 }
 val multikVersion="0.2.3"
 
-
-kotlin {
-    val hostOs = System.getProperty("os.name")
-    val isArm64 = System.getProperty("os.arch") == "aarch64"
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
-        hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
-        hostOs == "Linux" && isArm64 -> linuxArm64("native")
-        hostOs == "Linux" && !isArm64 -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-
-    nativeTarget.apply {
-        binaries {
-            executable {
-                val day = "%02d".format((project.findProperty("day") ?: LocalDate.now().dayOfMonth).toString().toInt())
-                entryPoint = "day$day.main"
-            }
-        }
-    }
-
-    sourceSets {
-        nativeMain.dependencies {
-            implementation(libs.kotlinxSerializationJson)
-
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.6.0")
-
-            implementation("org.jetbrains.kotlinx:multik-core:$multikVersion")
-            implementation("org.jetbrains.kotlinx:multik-kotlin:$multikVersion")
-        }
-    }
+dependencies {
+    // Kotlin Matrix Math library
+    implementation("org.jetbrains.kotlinx:multik-core:$multikVersion")
+    implementation("org.jetbrains.kotlinx:multik-kotlin:$multikVersion")
 }
 
-tasks.register("run") {
-    dependsOn("runDebugExecutableNative")
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
+}
+tasks {
+    wrapper {
+        gradleVersion = "8.11.1"
+    }
 }

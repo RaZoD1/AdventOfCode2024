@@ -3,8 +3,11 @@ package day06
 import Vec2
 import day04.at
 import day04.inGrid
+import day07.solveLevel1
+import day07.solveLevel2
 import day08.Grid
 import getInput
+import runLevels
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -44,7 +47,7 @@ fun findVisitedTiles(grid: List<List<Char>>, startPos: Vec2, startDir: Vec2 = Ve
 }
 
 
-fun solveLevel1(grid: Grid) {
+fun solveLevel1(grid: Grid): Long {
     val startPos = findCharInGrid(grid, '^')
 
     val distinctVisitedTiles = measureTimedValue { findVisitedTiles(grid, startPos) }.let {
@@ -53,6 +56,7 @@ fun solveLevel1(grid: Grid) {
     }
 
     println("Visited Tiles: ${distinctVisitedTiles.size}")
+    return distinctVisitedTiles.size.toLong()
 }
 
 fun isLoop(grid: List<List<Char>>, extraBlock: Vec2, startPos: Vec2, startDir: Vec2 = Vec2.UP): Boolean {
@@ -81,33 +85,32 @@ fun isLoop(grid: List<List<Char>>, extraBlock: Vec2, startPos: Vec2, startDir: V
     }
 }
 
-/* disabled due to multiplatform kotlin/native
-fun bruteForceParallel(grid: List<List<Char>>){
+
+fun bruteForceParallel(grid: List<List<Char>>): Long {
     val startPos = findCharInGrid(grid, '^')
 
     val visitedTiles = findVisitedTiles(grid, startPos)
     val possibleBlocks = visitedTiles.parallelStream().filter { isLoop(grid, it, startPos) }.count()
     println("Possible Blocks (brute force - parallel): $possibleBlocks")
+    return possibleBlocks
+}
 
-}*/
-
-fun bruteForce(grid: List<List<Char>>) {
+fun bruteForce(grid: List<List<Char>>): Long{
     val startPos = findCharInGrid(grid, '^')
 
     val visitedTiles = findVisitedTiles(grid, startPos)
     val possibleBlocks = visitedTiles.count { isLoop(grid, it, startPos) }
     println("Possible Blocks (brute force): $possibleBlocks")
+    return possibleBlocks.toLong()
 }
 
-fun solveLevel2(grid: Grid) {
-    measureTime { bruteForce(grid) }.also { println("Brute force time (synchronous): ${it.inWholeMilliseconds}ms") }
-    //measureTime { bruteForceParallel(grid) }.also { println("Brute force time (parallel): ${it.inWholeMilliseconds}ms") }
+fun solveLevel2(grid: Grid): Long {
+    return bruteForceParallel(grid)
 }
 
 fun main() {
     val text = getInput(6)
 
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
-    solveLevel1(grid)
-    solveLevel2(grid)
+    runLevels(6, { solveLevel1(grid) }, { solveLevel2(grid) })
 }

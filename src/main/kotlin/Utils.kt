@@ -1,18 +1,13 @@
-import kotlinx.io.Source
-import kotlinx.io.buffered
-import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.readString
+import kotlin.io.path.Path
+import kotlin.io.path.readText
 import kotlin.math.*
+import kotlin.time.measureTimedValue
 
 fun getInput(day: Int, sample: Boolean = false, alternateFileName: String? = null): String {
     val dayString = if (day < 10) "0$day" else "$day"
     val filename = if (sample) "sample" else alternateFileName ?: "input"
-    val path = Path("./inputFiles/day$dayString/$filename")
 
-    val buffer: Source = SystemFileSystem.source(path).buffered()
-
-    return buffer.readString()
+    return Path("./inputFiles/day$dayString/$filename").readText().replace("\r", "")
 }
 
 fun toRadians(degrees: Double): Double = degrees * PI / 180.0
@@ -147,5 +142,50 @@ fun plotVec2s(positions: Iterable<Vec2>) {
         grid[position.row][position.col] = 'X'
     }
     println(grid.joinToString("\n") { it.joinToString("") })
+
+}
+
+fun getSolution(day: Int): Pair<Long?, Long?>{
+    val line = getInput(0, alternateFileName = "solutions").split("\n").getOrElse(day) {""}
+    val answers = line.split(",").map { it.toLongOrNull() }
+    return Pair(answers.getOrNull(0), answers.getOrNull(1))
+}
+
+fun runLevels(day: Int, level1: (()->Long), level2: (()->Long)?, times: Int = 100,) {
+    val result1 = (0..<times).map{ measureTimedValue(level1) }
+    val result2 = if(level2 != null ) (0..<times).map{ measureTimedValue(level2) } else null
+
+    val (level1Solution, level2Solution) = getSolution(day)
+
+    println("Part 1:   ${result1.first().value}\n" +
+            "   Initial run took\t${result1.first().duration}\n" +
+            "   Last (${times}) run took\t${result1.last().duration}\n" +
+            "   Average run took\t${result1.let {it.map{it.duration}.reduce { l,r -> l + r} / result1.size}}")
+    if(!result1.all { it.value == result1.first().value }) {
+        println("WARNING: Not every run had the same result")
+    } else if(level1Solution != null){
+        if(level1Solution == result1.first().value){
+            println("SUCCESS: Answer is CORRECT")
+        } else {
+            println("ERROR: Answer is wrong  Correct answer: $level1Solution  Your answer ${result1.first().value}")
+        }
+    }
+    println()
+
+    if(result2 != null) {
+        println("Part 2:   ${result2.first().value}\n" +
+                "   Initial run took\t${result2.first().duration}\n" +
+                "   Last (${times}) run took\t${result2.last().duration}\n" +
+                "   Average run took\t${result2.let {it.map{it.duration}.reduce { l,r -> l + r} / result2.size}}")
+        if(!result2.all { it.value == result2.first().value }) {
+            println("WARNING: Not every run had the same result")
+        } else if(level2Solution != null){
+            if(level2Solution == result2.first().value){
+                println("SUCCESS: Answer is CORRECT")
+            } else {
+                println("ERROR: Answer is wrong  Correct answer: $level2Solution  Your answer ${result2.first().value}")
+            }
+        }
+    }
 
 }

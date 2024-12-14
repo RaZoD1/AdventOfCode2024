@@ -7,6 +7,7 @@ import day04.at
 import day04.inGrid
 import day08.Grid
 import getInput
+import runLevels
 
 
 val DIRECTIONS = listOf(Vec2.UP, Vec2.DOWN, Vec2.RIGHT, Vec2.LEFT)
@@ -64,7 +65,7 @@ fun getTrailheadRating(grid: Grid, startPos: Vec2): Int {
     return finalPositions.size
 }
 
-fun solveLevel1(grid: Grid) {
+fun solveLevel1(grid: Grid): Long {
     val startPositions: List<Vec2> = grid.mapIndexed { rowIdx, row ->
         row.mapIndexed { colIdx, c ->
             val pos = Vec2(colIdx, rowIdx)
@@ -75,9 +76,10 @@ fun solveLevel1(grid: Grid) {
     val totalScore = startPositions.sumOf { countTrailheadScore(grid, it) }
 
     println("Total score: $totalScore")
+    return totalScore.toLong()
 }
 
-fun solveLevel2(grid: Grid) {
+fun solveLevel2(grid: Grid): Long {
     val startPositions: List<Vec2> = grid.mapIndexed { rowIdx, row ->
         row.mapIndexed { colIdx, c ->
             val pos = Vec2(colIdx, rowIdx)
@@ -88,12 +90,12 @@ fun solveLevel2(grid: Grid) {
     val totalScore = startPositions.sumOf { getTrailheadRating(grid, it) }
 
     println("Total score: $totalScore")
+    return totalScore.toLong()
 }
 
 fun main() {
     val text = getInput(10)
 
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
-    solveLevel1(grid)
-    solveLevel2(grid)
+    runLevels(10, { solveLevel1(grid) }, { solveLevel2(grid) })
 }

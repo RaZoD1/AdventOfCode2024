@@ -3,8 +3,10 @@ package day12
 import Vec2
 import day04.at
 import day04.inGrid
+import day04.solveLevel2
 import day08.Grid
 import getInput
+import runLevels
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -55,7 +57,7 @@ fun areaPerimeter(area: Set<Vec2>): Long {
     return area.sumOf { pos -> 4 - DIRECTIONS.map { it + pos }.count { it in area } }.toLong()
 }
 
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
 
     val areas: List<Set<Vec2>> = findAreas(grid)
@@ -63,6 +65,7 @@ fun solveLevel1(text: String) {
     val totalPrice = areas.sumOf { area -> areaPerimeter(area) * area.size }
 
     println("Total price (part1): $totalPrice")
+    return totalPrice
 }
 
 val CORNER_MATRIX = mapOf(
@@ -88,7 +91,7 @@ fun areaSides(area: Set<Vec2>): Long {
     return corners.size.toLong() + extra
 }
 
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
 
     val areas: List<Set<Vec2>> = measureTimedValue { findAreas(grid) }.let {
@@ -99,14 +102,10 @@ fun solveLevel2(text: String) {
     val totalPrice = areas.sumOf { area -> areaSides(area) * area.size }
 
     println("Total price (part 2): $totalPrice")
+    return totalPrice
 }
 
 fun main() {
     val text = getInput(12)
-    measureTime { solveLevel1(text) }.also {
-        println("Time: $it")
-    }
-    measureTime { solveLevel2(text) }.also {
-        println("Time: $it")
-    }
+    runLevels(12, {solveLevel1(text)}, { solveLevel2(text) })
 }

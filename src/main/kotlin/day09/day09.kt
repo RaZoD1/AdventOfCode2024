@@ -1,11 +1,12 @@
 package day09
 
 import getInput
+import runLevels
 
 
 data class StorageEntry(val id: Int, val pos: Int, val len: Int)
 
-fun solveLevel1(text: String) {
+fun solveLevel1(text: String): Long {
     val storage = mutableListOf<Int?>()
 
     var id = 0
@@ -33,6 +34,7 @@ fun solveLevel1(text: String) {
 
     //println(storage)
     println("Checksum: $checksum")
+    return checksum
 }
 
 fun printStorage(storage: List<StorageEntry>) {
@@ -52,7 +54,7 @@ fun printStorage(storage: List<StorageEntry>) {
     println()
 }
 
-fun solveLevel2(text: String) {
+fun solveLevel2(text: String): Long {
     val storage = mutableListOf<StorageEntry>() // Id, Length
 
     var id = 0
@@ -102,13 +104,14 @@ fun solveLevel2(text: String) {
     }
 
     val checksum = storage.sumOf { file -> (file.pos..<(file.pos + file.len)).sumOf { it * file.id.toLong() } }
-    printStorage(storage)
+    //printStorage(storage)
 
     println("Checksum: $checksum")
+    return checksum
 }
 
 fun main() {
     val text = getInput(9)
-    solveLevel1(text)
-    solveLevel2(text)
+    runLevels(9, { solveLevel1(text) }, { solveLevel2(text) })
+
 }

@@ -3,7 +3,10 @@ package day08
 import Vec2
 import day04.at
 import day04.inGrid
+import day09.solveLevel1
+import day09.solveLevel2
 import getInput
+import runLevels
 
 typealias Grid = List<List<Char>>
 
@@ -27,7 +30,7 @@ fun calculateAntinodePositions(grid: Grid, antennas: List<Vec2>): Set<Vec2> {
     return antinodes
 }
 
-fun solveLevel1(grid: Grid) {
+fun solveLevel1(grid: Grid): Long {
     val antennaMap = grid.mapIndexed { rowIdx, row ->
         row.mapIndexed { colIdx, char ->
             val pos = Vec2(colIdx, rowIdx)
@@ -40,6 +43,7 @@ fun solveLevel1(grid: Grid) {
         antennaMap.flatMap { (_, positions) -> calculateAntinodePositions(grid, positions) }.toSet().count()
 
     println("Amount of antinodes: $antinodeCount")
+    return antinodeCount.toLong()
 }
 
 fun calculateAntinodePositions2(grid: Grid, antennas: List<Vec2>): Set<Vec2> {
@@ -68,7 +72,7 @@ fun calculateAntinodePositions2(grid: Grid, antennas: List<Vec2>): Set<Vec2> {
     return antinodes
 }
 
-fun solveLevel2(grid: Grid) {
+fun solveLevel2(grid: Grid): Long {
     val antennaMap = grid.mapIndexed { rowIdx, row ->
         row.mapIndexed { colIdx, char ->
             val pos = Vec2(colIdx, rowIdx)
@@ -81,6 +85,7 @@ fun solveLevel2(grid: Grid) {
         antennaMap.flatMap { (_, positions) -> calculateAntinodePositions2(grid, positions) }.toSet().count()
 
     println("Amount of antinodes: $antinodeCount")
+    return antinodeCount.toLong()
 }
 
 fun main() {
@@ -88,6 +93,5 @@ fun main() {
 
     val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
 
-    solveLevel1(grid)
-    solveLevel2(grid)
+    runLevels(8, { solveLevel1(grid) }, { solveLevel2(grid) })
 }
