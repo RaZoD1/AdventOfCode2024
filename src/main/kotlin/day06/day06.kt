@@ -3,12 +3,9 @@ package day06
 import Vec2
 import day04.at
 import day04.inGrid
-import day07.solveLevel1
-import day07.solveLevel2
 import day08.Grid
 import getInput
 import runLevels
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
@@ -95,7 +92,7 @@ fun bruteForceParallel(grid: List<List<Char>>): Long {
     return possibleBlocks
 }
 
-fun bruteForce(grid: List<List<Char>>): Long{
+fun bruteForce(grid: List<List<Char>>): Long {
     val startPos = findCharInGrid(grid, '^')
 
     val visitedTiles = findVisitedTiles(grid, startPos)

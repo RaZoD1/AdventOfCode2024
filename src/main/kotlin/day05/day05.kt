@@ -68,5 +68,5 @@ fun main() {
     val updates = text.split("\n\n").last().split("\n").filter { it.isNotEmpty() }
         .map { line -> line.split(",").map { it.toInt() } }
 
-    runLevels(5, {solveLevel1(rules, updates)}, { solveLevel2(rules, updates) })
+    runLevels(5, { solveLevel1(rules, updates) }, { solveLevel2(rules, updates) })
 }

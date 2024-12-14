@@ -3,11 +3,9 @@ package day12
 import Vec2
 import day04.at
 import day04.inGrid
-import day04.solveLevel2
 import day08.Grid
 import getInput
 import runLevels
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 val DIRECTIONS = listOf(Vec2.UP, Vec2.DOWN, Vec2.RIGHT, Vec2.LEFT)
@@ -107,5 +105,5 @@ fun solveLevel2(text: String): Long {
 
 fun main() {
     val text = getInput(12)
-    runLevels(12, {solveLevel1(text)}, { solveLevel2(text) })
+    runLevels(12, { solveLevel1(text) }, { solveLevel2(text) })
 }

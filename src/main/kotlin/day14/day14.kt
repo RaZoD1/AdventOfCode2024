@@ -4,7 +4,6 @@ import Vec2
 import getInput
 import plotVec2s
 import runLevels
-import kotlin.time.measureTime
 
 
 data class Robot(var p: Vec2, val v: Vec2) {
@@ -95,6 +94,6 @@ val SIZE = if (USE_SAMPLE) Vec2(col = 11, row = 7) else Vec2(101, 103)
 fun main() {
     val text = getInput(14, sample = USE_SAMPLE)
 
-    runLevels(14, {solveLevel1(text)}, {solveLevel2(text)}, times = 1)
+    runLevels(14, { solveLevel1(text) }, { solveLevel2(text) }, times = 1)
 
 }

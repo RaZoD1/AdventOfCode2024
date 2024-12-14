@@ -1,7 +1,6 @@
 package day13
 
 import LVec2
-import day14.solveLevel2
 import getInput
 import org.jetbrains.kotlinx.multik.api.linalg.solve
 import org.jetbrains.kotlinx.multik.api.mk
@@ -9,9 +8,7 @@ import org.jetbrains.kotlinx.multik.api.ndarray
 import org.jetbrains.kotlinx.multik.ndarray.operations.map
 import org.jetbrains.kotlinx.multik.ndarray.operations.toList
 import runLevels
-import kotlin.math.min
 import kotlin.math.roundToLong
-import kotlin.time.measureTime
 
 data class ClawMachine(val btnA: LVec2, val btnB: LVec2, val prize: LVec2) {
     companion object {

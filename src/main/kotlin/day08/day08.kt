@@ -3,8 +3,6 @@ package day08
 import Vec2
 import day04.at
 import day04.inGrid
-import day09.solveLevel1
-import day09.solveLevel2
 import getInput
 import runLevels
 
