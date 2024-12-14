@@ -1,5 +1,6 @@
 import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.math.sin
 
 fun getResourceAsText(path: String): String? =
@@ -77,6 +78,53 @@ data class Vec2(val col: Int, val row: Int){
     }
 
     fun turnAround(): Vec2 {
+        return this.rotate(180.0)
+    }
+}
+
+
+data class LVec2(val col: Long, val row: Long){
+    companion object{
+        val LEFT = LVec2(-1, 0)
+        val RIGHT = LVec2(1, 0)
+        val UP = LVec2(0, -1)
+        val DOWN = LVec2(0, 1)
+        val UP_LEFT = LVec2(-1, -1)
+        val UP_RIGHT = LVec2(1, -1)
+        val DOWN_LEFT = LVec2(-1, 1)
+        val DOWN_RIGHT = LVec2(1, 1)
+    }
+
+    val x = col
+    val y = row
+
+    operator fun plus(v: LVec2): LVec2 {
+        return LVec2(this.col + v.col, this.row + v.row)
+    }
+    operator fun minus(v: LVec2): LVec2 {
+        return LVec2(this.col - v.col, this.row - v.row)
+    }
+    operator fun times(scale: Long): LVec2 {
+        return LVec2(this.col * scale, this.row*scale)
+    }
+
+    fun rotate(degrees: Double): LVec2 {
+
+        val radians = Math.toRadians(degrees)
+        return LVec2(
+            row = (sin(radians) * col + cos(radians) * row).roundToLong(),
+            col = (cos(radians) * col - sin(radians) * row).roundToLong()
+        )
+    }
+    fun turnRight(): LVec2 {
+        return this.rotate(90.0)
+    }
+
+    fun turnLeft(): LVec2 {
+        return this.rotate(-90.0)
+    }
+
+    fun turnAround(): LVec2 {
         return this.rotate(180.0)
     }
 }
