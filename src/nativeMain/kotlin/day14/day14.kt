@@ -84,7 +84,7 @@ fun solveLevel2(text: String) {
         if (mayContainTree(robots)) {
             printRobots(robots)
             println(secs)
-            readln()
+            break
         }
     }
 }
@@ -92,7 +92,7 @@ fun solveLevel2(text: String) {
 const val USE_SAMPLE = false
 val SIZE = if (USE_SAMPLE) Vec2(col = 11, row = 7) else Vec2(101, 103)
 fun main() {
-    val text = getInput(2, sample = USE_SAMPLE)
+    val text = getInput(14, sample = USE_SAMPLE)
     measureTime { solveLevel1(text) }.also {
         println("Time: $it")
     }

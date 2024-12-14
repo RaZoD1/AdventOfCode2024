@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.cli.jvm.main
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
@@ -25,7 +27,10 @@ kotlin {
 
     nativeTarget.apply {
         binaries {
-            executable()
+            executable {
+                val day = "%02d".format(project.findProperty("day").toString().toInt())
+                entryPoint = "day$day.main"
+            }
         }
     }
 
@@ -40,3 +45,4 @@ kotlin {
         }
     }
 }
+
