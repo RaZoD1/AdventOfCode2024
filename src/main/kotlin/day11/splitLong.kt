@@ -1,7 +1,7 @@
 package day11
 
 import kotlin.math.pow
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 
 fun splitNumberString(number: Long): Pair<Long, Long> {
@@ -26,21 +26,21 @@ fun splitNumberArithmetic(number: Long): Pair<Long, Long> {
 fun main() {
     val numbers = listOf(2040L, 123456L, 98765432L, 1234567890L, 112233445566L)
 
-    val stringMethodTime = measureTimeMillis {
+    val stringMethodTime = measureTime {
         repeat(100_000) {
             for (number in numbers) {
                 splitNumberString(number)
             }
         }
-    }
+    }.inWholeMilliseconds
 
-    val arithmeticMethodTime = measureTimeMillis {
+    val arithmeticMethodTime = measureTime {
         repeat(100_000) {
             for (number in numbers) {
                 splitNumberArithmetic(number)
             }
         }
-    }
+    }.inWholeMilliseconds
 
     println("String method time: ${stringMethodTime}ms")
     println("Arithmetic method time: ${arithmeticMethodTime}ms")
