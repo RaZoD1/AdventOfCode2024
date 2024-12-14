@@ -25,15 +25,15 @@ kotlin {
 
     nativeTarget.apply {
         binaries {
-            executable {
-                entryPoint = "main"
-            }
+            executable()
         }
     }
 
     sourceSets {
         nativeMain.dependencies {
             implementation(libs.kotlinxSerializationJson)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.6.0")
 
             implementation("org.jetbrains.kotlinx:multik-core:$multikVersion")
             implementation("org.jetbrains.kotlinx:multik-kotlin:$multikVersion")
