@@ -46,6 +46,10 @@ data class Vec2(val col: Int, val row: Int){
         val DOWN_LEFT = Vec2(-1, 1)
         val DOWN_RIGHT = Vec2(1, 1)
     }
+
+    val x = col
+    val y = row
+
     operator fun plus(v: Vec2): Vec2 {
         return Vec2(this.col + v.col, this.row + v.row)
     }
@@ -75,4 +79,37 @@ data class Vec2(val col: Int, val row: Int){
     fun turnAround(): Vec2 {
         return this.rotate(180.0)
     }
+}
+
+fun calculateLCM(a: Long, b: Long): Long {
+    if (a == 0L || b == 0L) {
+        throw IllegalArgumentException("LCM is not defined for zero.")
+    }
+
+    return (a / gcd(a, b)) * b
+}
+
+// Helper function to calculate GCD using the Euclidean algorithm
+fun gcd(a: Long, b: Long): Long {
+    var x = a
+    var y = b
+
+    while (y != 0L) {
+        val temp = y
+        y = x % y
+        x = temp
+    }
+
+    return x
+}
+
+fun plotVec2s(positions: Iterable<Vec2>) {
+    val cols = positions.maxOf { it.col } + 1
+    val rows = positions.maxOf { it.row } + 1
+    val grid = List(rows) { MutableList(cols) {'.'} }
+    for (position in positions) {
+        grid[position.row][position.col] = 'X'
+    }
+    println(grid.joinToString("\n") { it.joinToString("") })
+
 }
