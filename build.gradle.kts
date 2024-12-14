@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.cli.jvm.main
+import java.time.LocalDate
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -28,7 +28,7 @@ kotlin {
     nativeTarget.apply {
         binaries {
             executable {
-                val day = "%02d".format(project.findProperty("day").toString().toInt())
+                val day = "%02d".format((project.findProperty("day") ?: LocalDate.now().dayOfMonth).toString().toInt())
                 entryPoint = "day$day.main"
             }
         }
@@ -46,3 +46,6 @@ kotlin {
     }
 }
 
+tasks.register("run") {
+    dependsOn("runDebugExecutableNative")
+}
