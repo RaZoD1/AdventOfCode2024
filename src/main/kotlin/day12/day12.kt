@@ -3,8 +3,9 @@ package day12
 import Vec2
 import day04.at
 import day04.inGrid
-import day08.Grid
+import Grid
 import getInput
+import parseGrid
 import runLevels
 import kotlin.time.measureTimedValue
 
@@ -55,8 +56,8 @@ fun areaPerimeter(area: Set<Vec2>): Long {
     return area.sumOf { pos -> 4 - DIRECTIONS.map { it + pos }.count { it in area } }.toLong()
 }
 
-fun solveLevel1(text: String): Long {
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
+fun solveLevel1(grid: Grid): Long {
+
 
     val areas: List<Set<Vec2>> = findAreas(grid)
 
@@ -89,8 +90,8 @@ fun areaSides(area: Set<Vec2>): Long {
     return corners.size.toLong() + extra
 }
 
-fun solveLevel2(text: String): Long {
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
+fun solveLevel2(grid: Grid): Long {
+
 
     val areas: List<Set<Vec2>> = measureTimedValue { findAreas(grid) }.let {
         println("Time to find areas: ${it.duration}")
@@ -105,5 +106,6 @@ fun solveLevel2(text: String): Long {
 
 fun main() {
     val text = getInput(12)
-    runLevels(12, { solveLevel1(text) }, { solveLevel2(text) })
+    val grid = parseGrid(text)
+    runLevels(12, { solveLevel1(grid) }, { solveLevel2(grid) })
 }

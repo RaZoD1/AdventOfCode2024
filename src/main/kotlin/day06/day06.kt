@@ -3,8 +3,9 @@ package day06
 import Vec2
 import day04.at
 import day04.inGrid
-import day08.Grid
+import Grid
 import getInput
+import parseGrid
 import runLevels
 import kotlin.time.measureTimedValue
 
@@ -107,7 +108,7 @@ fun solveLevel2(grid: Grid): Long {
 
 fun main() {
     val text = getInput(6)
+    val grid = parseGrid(text)
 
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
     runLevels(6, { solveLevel1(grid) }, { solveLevel2(grid) })
 }

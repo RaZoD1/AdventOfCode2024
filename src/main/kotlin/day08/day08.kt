@@ -1,12 +1,12 @@
 package day08
 
+import Grid
 import Vec2
 import day04.at
 import day04.inGrid
 import getInput
+import parseGrid
 import runLevels
-
-typealias Grid = List<List<Char>>
 
 fun calculateAntinodePositions(grid: Grid, antennas: List<Vec2>): Set<Vec2> {
 
@@ -88,8 +88,7 @@ fun solveLevel2(grid: Grid): Long {
 
 fun main() {
     val text = getInput(8)
-
-    val grid = text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
+    val grid = parseGrid(text)
 
     runLevels(8, { solveLevel1(grid) }, { solveLevel2(grid) })
 }

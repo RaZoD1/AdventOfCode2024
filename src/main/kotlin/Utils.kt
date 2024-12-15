@@ -197,3 +197,7 @@ fun runLevels(day: Int, level1: (() -> Long), level2: (() -> Long)?, times: Int 
     }
 
 }
+
+typealias Grid = List<List<Char>>
+fun parseGrid(text: String): Grid =
+    text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }

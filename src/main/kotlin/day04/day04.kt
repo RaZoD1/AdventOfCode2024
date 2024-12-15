@@ -1,8 +1,9 @@
 package day04
 
 import Vec2
-import day08.Grid
+import Grid
 import getInput
+import parseGrid
 import runLevels
 
 val DIRECTIONS = listOf<Vec2>(
@@ -92,8 +93,7 @@ fun solveLevel2(grid: Grid): Long {
 
 fun main() {
     val text = getInput(4)
-
-    val grid = text.split("\n").map { it.toCharArray().toList() }
+    val grid = parseGrid(text)
 
     runLevels(4, { solveLevel1(grid) }, { solveLevel2(grid) })
 
