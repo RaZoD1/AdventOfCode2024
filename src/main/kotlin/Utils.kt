@@ -199,5 +199,18 @@ fun runLevels(day: Int, level1: (() -> Long), level2: (() -> Long)?, times: Int 
 }
 
 typealias Grid = List<List<Char>>
+typealias MutableGrid = MutableList<MutableList<Char>>
+
 fun parseGrid(text: String): Grid =
     text.split("\n").filter { it.isNotEmpty() }.map { it.toList() }
+
+fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
+    for ((rowIdx, row) in grid.withIndex()) {
+        for ((colIdx, c) in row.withIndex()) {
+            if (c == char) return Vec2(colIdx, rowIdx)
+        }
+    }
+    error("Couldn't find char '$char' in grid")
+}
+
+fun Grid.toMutableGrid(): MutableGrid = this.map{ it.toMutableList() }.toMutableList()

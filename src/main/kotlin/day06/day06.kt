@@ -4,19 +4,11 @@ import Vec2
 import day04.at
 import day04.inGrid
 import Grid
+import findCharInGrid
 import getInput
 import parseGrid
 import runLevels
 import kotlin.time.measureTimedValue
-
-fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
-    for ((rowIdx, row) in grid.withIndex()) {
-        for ((colIdx, c) in row.withIndex()) {
-            if (c == char) return Vec2(colIdx, rowIdx)
-        }
-    }
-    error("Couldn't find char '$char' in grid")
-}
 
 fun findVisitedTiles(grid: List<List<Char>>, startPos: Vec2, startDir: Vec2 = Vec2.UP): Set<Vec2> {
 
