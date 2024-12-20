@@ -102,12 +102,7 @@ fun allCheatPaths(
 
 
 fun solveLevel1(grid: Grid): Long {
-    val bestNonCheat = minPicoSecs(grid)
-    println("Best non-cheat: $bestNonCheat")
-
-    val paths = allCheatPaths(grid, bestNonCheat - 100 + 1, PathKey(findCharInGrid(grid, 'S'), 2, false))
-    println("Level 1 done")
-    return paths
+    return optimizedCountCheatPaths(grid, 2, if(USE_SAMPLE) 0 else 100)
 }
 
 
@@ -146,8 +141,11 @@ fun Vec2.manhattan(v: Vec2): Long {
 }
 
 fun solveLevel2(grid: Grid): Long {
+    return optimizedCountCheatPaths(grid, 20, if(USE_SAMPLE) 50 else 100)
+}
+
+fun optimizedCountCheatPaths(grid: Grid, cheatLength: Int, better: Int): Long {
     val bestNonCheat = minPicoSecs(grid)
-    val better = if(USE_SAMPLE) 50 else 100
     val maxCost = bestNonCheat - better
 
     val allDistances = allDistancesFrom(grid)
@@ -156,14 +154,10 @@ fun solveLevel2(grid: Grid): Long {
     return allDistances.entries.sumOf { (pos, distFromStart) ->
         return@sumOf allDistances.count { (pos2, dist2) ->
             val m = pos.manhattan(pos2)
-             val cond = m <= 20 &&  bestNonCheat - (dist2 - distFromStart) + m <= maxCost
-            if(cond){
-                println("From $pos to $pos2 with manhattan $m")
-            }
-            cond
+            m <= cheatLength &&  bestNonCheat - (dist2 - distFromStart) + m <= maxCost
+
         }.toLong()
     }
-
 }
 
 const val USE_SAMPLE = false
