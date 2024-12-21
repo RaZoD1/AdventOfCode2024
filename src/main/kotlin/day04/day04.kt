@@ -2,7 +2,9 @@ package day04
 
 import Vec2
 import Grid
+import at
 import getInput
+import inGrid
 import parseGrid
 import runLevels
 
@@ -17,19 +19,7 @@ val DIRECTIONS = listOf<Vec2>(
     Vec2.DOWN_RIGHT
 )
 
-fun <T> List<List<T>>.inGrid(pos: Vec2): Boolean {
-    if (pos.row in this.indices) {
-        if (pos.col in this[pos.row].indices)
-            return true
-    }
-    return false
-}
 
-fun <T> List<List<T>>.at(pos: Vec2): T {
-    if (!this.inGrid(pos)) error("pos $pos outside of grid")
-
-    return this[pos.row][pos.col]!!
-}
 
 fun solveLevel1(grid: Grid): Long {
     var xmasCount = 0

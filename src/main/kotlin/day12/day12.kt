@@ -1,10 +1,10 @@
 package day12
 
 import Vec2
-import day04.at
-import day04.inGrid
 import Grid
+import at
 import getInput
+import inGrid
 import parseGrid
 import runLevels
 import kotlin.time.measureTimedValue

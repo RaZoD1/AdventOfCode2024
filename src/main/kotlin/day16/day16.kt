@@ -2,12 +2,11 @@ package day16
 
 import Grid
 import Vec2
-import day04.at
-import day04.inGrid
+import at
 import findCharInGrid
 import getInput
+import inGrid
 import parseGrid
-import plotVec2s
 import runLevels
 import java.util.PriorityQueue
 

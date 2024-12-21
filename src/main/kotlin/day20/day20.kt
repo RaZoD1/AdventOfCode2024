@@ -2,14 +2,13 @@ package day20
 
 import Grid
 import Vec2
-import day04.at
-import day04.inGrid
+import at
 import findCharInGrid
 import getInput
+import inGrid
 import parseGrid
 import runLevels
 import java.util.*
-import kotlin.math.abs
 
 val DIRECTIONS = listOf(Vec2.UP, Vec2.DOWN, Vec2.LEFT, Vec2.RIGHT)
 fun getNeighbors(grid: Grid, pos: Vec2): List<Vec2> {
@@ -133,11 +132,6 @@ fun allDistancesFrom(grid: Grid, startPos: Vec2 = findCharInGrid(grid, 'S')): Ma
     }
 
     return distances
-}
-
-fun Vec2.manhattan(v: Vec2): Long {
-    val d = this - v
-    return abs(d.x) + abs(d.y).toLong()
 }
 
 fun solveLevel2(grid: Grid): Long {

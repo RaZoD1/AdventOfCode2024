@@ -60,6 +60,11 @@ data class Vec2(val col: Int, val row: Int) {
     fun turnAround(): Vec2 {
         return this.rotate(180.0)
     }
+
+    fun manhattan(v: Vec2): Long {
+        val d = this - v
+        return abs(d.x) + abs(d.y).toLong()
+    }
 }
 
 
@@ -214,3 +219,17 @@ fun findCharInGrid(grid: List<List<Char>>, char: Char): Vec2 {
 }
 
 fun Grid.toMutableGrid(): MutableGrid = this.map{ it.toMutableList() }.toMutableList()
+
+fun Grid.inGrid(pos: Vec2): Boolean {
+    if (pos.row in this.indices) {
+        if (pos.col in this[pos.row].indices)
+            return true
+    }
+    return false
+}
+
+fun Grid.at(pos: Vec2): Char {
+    if (!this.inGrid(pos)) error("pos $pos outside of grid")
+
+    return this[pos.row][pos.col]
+}

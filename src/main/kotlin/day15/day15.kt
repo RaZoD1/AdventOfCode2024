@@ -2,15 +2,14 @@ package day15
 
 import Grid
 import Vec2
-import day04.at
-import day04.inGrid
+import at
 import day12.forEachCell
 import findCharInGrid
 import getInput
+import inGrid
 import parseGrid
 import runLevels
 import toMutableGrid
-import kotlin.math.E
 
 const val WALL = '#'
 const val CRATE = 'O'

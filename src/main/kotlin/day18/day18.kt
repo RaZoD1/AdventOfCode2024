@@ -3,9 +3,9 @@ package day18
 
 import Grid
 import Vec2
-import day04.at
-import day04.inGrid
+import at
 import getInput
+import inGrid
 import runLevels
 import toMutableGrid
 import java.util.PriorityQueue
