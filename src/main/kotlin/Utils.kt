@@ -15,6 +15,7 @@ fun toRadians(degrees: Double): Double = degrees * PI / 180.0
 
 data class Vec2(val col: Int, val row: Int) {
     companion object {
+        val ZERO = Vec2(0, 0)
         val LEFT = Vec2(-1, 0)
         val RIGHT = Vec2(1, 0)
         val UP = Vec2(0, -1)
@@ -38,6 +39,10 @@ data class Vec2(val col: Int, val row: Int) {
 
     operator fun times(scale: Int): Vec2 {
         return Vec2(this.col * scale, this.row * scale)
+    }
+
+    operator fun times(vec: Vec2): Vec2 {
+        return Vec2(this.col * vec.col, this.row * vec.row)
     }
 
     fun rotate(degrees: Double): Vec2 {
@@ -65,6 +70,7 @@ data class Vec2(val col: Int, val row: Int) {
         val d = this - v
         return abs(d.x) + abs(d.y).toLong()
     }
+
 }
 
 
