@@ -95,13 +95,17 @@ sealed class KeypadController {
             return controlledBy.findCost(buttonsToHit) + (abs(delta.x) + abs(delta.y) - 1)
         }
 
+        val cache = mutableMapOf<Pair<Vec2, Vec2>, Long>()
         fun fromToHitCost(from: Vec2, to: Vec2): Long {
-            val delta = to - from
-            val (dx, dy) = delta
-            return if(dx != 0 && dy != 0){
-                solveDiagonal(from, delta)
-            } else {
-                solveStraight(from, delta)
+            val cacheKey = Pair(from, to)
+            return cache.getOrPut(cacheKey) {
+                val delta = to - from
+                val (dx, dy) = delta
+                if(dx != 0 && dy != 0){
+                    solveDiagonal(from, delta)
+                } else {
+                    solveStraight(from, delta)
+                }
             }
         }
     }
@@ -165,14 +169,11 @@ val dirToBtn = mapOf<Vec2, Button>(
     Vec2.DOWN to Button.DOWN
 )
 
-fun findCodeComplexity(code: String): Long {
+fun findCodeComplexity(code: String, keypad: Keypad): Long {
     val numericCodePart = code.takeWhile { c -> c.isDigit() }.toLong()
     val buttons = code.map { c -> Button.lookup(c) ?: error("Code contains unknown Button $c") }
 
-    val manualController = KeypadController.Manual()
-    val c1 = KeypadController.Robot(manualController)
-    val c2 = KeypadController.Robot(c1)
-    val keypad = Keypad(c2)
+
 
     val typingCost = keypad.findCost(buttons)
 
@@ -181,12 +182,26 @@ fun findCodeComplexity(code: String): Long {
 }
 
 fun solveLevel1(codes: List<String>): Long {
-    return codes.sumOf(::findCodeComplexity)
+    val manualController = KeypadController.Manual()
+    val c1 = KeypadController.Robot(manualController)
+    val c2 = KeypadController.Robot(c1)
+    val keypad = Keypad(c2)
+
+    return codes.sumOf {findCodeComplexity(it, keypad)}
 }
 
 
 fun solveLevel2(codes: List<String>): Long {
-    return -1
+    val manualController = KeypadController.Manual()
+    var controlledBy: KeypadController = manualController
+
+    for(i in 1..25){
+        controlledBy = KeypadController.Robot(controlledBy)
+    }
+
+    val keypad = Keypad(controlledBy)
+
+    return codes.sumOf {findCodeComplexity(it, keypad)}
 }
 
 
