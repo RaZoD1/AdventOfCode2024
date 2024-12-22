@@ -117,20 +117,22 @@ fun solveLevel2(grid: Grid, movements: List<Vec2>): Long {
             val moved = mutableSetOf<Vec2>()
             while (toPlace.isNotEmpty()) {
                 val (pos, char) = toPlace.removeFirst()
-                if(char == EMPTY && (grid.at(pos) == EMPTY || grid.at(pos) == WALL)) continue
-                if(pos in moved) continue
-                if(move.row == 0){
-                    if(grid.at(pos) != EMPTY) toPlace.add(pos + move to grid.at(pos))
+                if (char == EMPTY && (grid.at(pos) == EMPTY || grid.at(pos) == WALL)) continue
+                if (pos in moved) continue
+                if (move.row == 0) {
+                    if (grid.at(pos) != EMPTY) toPlace.add(pos + move to grid.at(pos))
                     grid[pos.row][pos.col] = char
                     moved.add(pos)
                 } else {
-                    toPlace.addAll(when(grid.at(pos)) {
-                        CRATE_LEFT -> listOf((pos + Vec2.RIGHT) to EMPTY, (pos + move) to CRATE_LEFT)
-                        CRATE_RIGHT -> listOf((pos + Vec2.LEFT) to EMPTY, (pos + move) to CRATE_RIGHT)
-                        EMPTY -> emptyList()
-                        ROBOT -> listOf((pos + move) to ROBOT)
-                        else -> error("idk")
-                    })
+                    toPlace.addAll(
+                        when (grid.at(pos)) {
+                            CRATE_LEFT -> listOf((pos + Vec2.RIGHT) to EMPTY, (pos + move) to CRATE_LEFT)
+                            CRATE_RIGHT -> listOf((pos + Vec2.LEFT) to EMPTY, (pos + move) to CRATE_RIGHT)
+                            EMPTY -> emptyList()
+                            ROBOT -> listOf((pos + move) to ROBOT)
+                            else -> error("idk")
+                        }
+                    )
                     grid[pos.row][pos.col] = char
                     moved.add(pos)
                 }

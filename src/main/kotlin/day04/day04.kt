@@ -1,7 +1,7 @@
 package day04
 
-import Vec2
 import Grid
+import Vec2
 import at
 import getInput
 import inGrid
@@ -18,7 +18,6 @@ val DIRECTIONS = listOf<Vec2>(
     Vec2.DOWN_LEFT,
     Vec2.DOWN_RIGHT
 )
-
 
 
 fun solveLevel1(grid: Grid): Long {

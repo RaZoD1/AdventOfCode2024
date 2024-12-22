@@ -92,7 +92,7 @@ fun allCheatPaths(
         visited.add(neigh.pos)
 
         paths += allCheatPaths(grid, maxSteps, neigh, goal, visited)
-        visited.remove(neigh.pos);
+        visited.remove(neigh.pos)
 
     }
 
@@ -101,7 +101,7 @@ fun allCheatPaths(
 
 
 fun solveLevel1(grid: Grid): Long {
-    return optimizedCountCheatPaths(grid, 2, if(USE_SAMPLE) 0 else 100)
+    return optimizedCountCheatPaths(grid, 2, if (USE_SAMPLE) 0 else 100)
 }
 
 
@@ -135,7 +135,7 @@ fun allDistancesFrom(grid: Grid, startPos: Vec2 = findCharInGrid(grid, 'S')): Ma
 }
 
 fun solveLevel2(grid: Grid): Long {
-    return optimizedCountCheatPaths(grid, 20, if(USE_SAMPLE) 50 else 100)
+    return optimizedCountCheatPaths(grid, 20, if (USE_SAMPLE) 50 else 100)
 }
 
 fun optimizedCountCheatPaths(grid: Grid, cheatLength: Int, better: Int): Long {
@@ -148,7 +148,7 @@ fun optimizedCountCheatPaths(grid: Grid, cheatLength: Int, better: Int): Long {
     return allDistances.entries.sumOf { (pos, distFromStart) ->
         return@sumOf allDistances.count { (pos2, dist2) ->
             val m = pos.manhattan(pos2)
-            m <= cheatLength &&  bestNonCheat - (dist2 - distFromStart) + m <= maxCost
+            m <= cheatLength && bestNonCheat - (dist2 - distFromStart) + m <= maxCost
 
         }.toLong()
     }

@@ -2,8 +2,8 @@
 
 package day10
 
-import Vec2
 import Grid
+import Vec2
 import at
 import getInput
 import inGrid

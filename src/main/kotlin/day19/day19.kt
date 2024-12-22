@@ -8,17 +8,17 @@ import runLevels
 val cache = mutableMapOf<String, Long>()
 fun possibleTowelArrangements(towels: Set<String>, design: String): Long {
 
-    if(cache.containsKey(design)) return cache[design]!!
+    if (cache.containsKey(design)) return cache[design]!!
 
     val possibleTowels = towels.filter { towel -> design.startsWith(towel) }
     var arrangements = 0L
 
     for (towel in possibleTowels) {
         val designLeft = design.drop(towel.length)
-        if(designLeft.isEmpty()){
+        if (designLeft.isEmpty()) {
             arrangements += 1
-        }else {
-            arrangements += possibleTowelArrangements(towels,designLeft)
+        } else {
+            arrangements += possibleTowelArrangements(towels, designLeft)
         }
     }
     cache[design] = arrangements

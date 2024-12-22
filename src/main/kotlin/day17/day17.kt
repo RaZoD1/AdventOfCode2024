@@ -110,7 +110,7 @@ fun solveLevel1(computer: Computer): Long {
 
 fun findAReg(aReg: Long, program: List<Int>): Long {
 
-    if(program.isEmpty()) return aReg
+    if (program.isEmpty()) return aReg
     val goal = program.last().toLong()
     for (b in 0L..7L) {
         val a = (aReg shl 3) xor b

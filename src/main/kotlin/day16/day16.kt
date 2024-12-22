@@ -8,7 +8,7 @@ import getInput
 import inGrid
 import parseGrid
 import runLevels
-import java.util.PriorityQueue
+import java.util.*
 
 
 const val START = 'S'
@@ -20,7 +20,7 @@ fun getNeighbors(grid: Grid, current: Pair<Vec2, Vec2>): Map<Pair<Vec2, Vec2>, L
     val neighbors = mutableMapOf<Pair<Vec2, Vec2>, Long>()
 
     val nextPos = current.first + current.second
-    if(grid.inGrid(nextPos) && grid.at(nextPos) != WALL) neighbors[nextPos to current.second] = 1
+    if (grid.inGrid(nextPos) && grid.at(nextPos) != WALL) neighbors[nextPos to current.second] = 1
     neighbors[current.first to current.second.turnLeft()] = 1000
     neighbors[current.first to current.second.turnRight()] = 1000
     return neighbors
@@ -37,18 +37,18 @@ fun solveLevel1(grid: Grid): Long {
     queue.add(startPos to Vec2.RIGHT)
     scores[startPos to Vec2.RIGHT] = 0L
 
-    while(queue.isNotEmpty()){
+    while (queue.isNotEmpty()) {
         val cur = queue.remove()
         val curScore = scores[cur] ?: error("Not in scores")
 
 
         for ((key, deltaScore) in getNeighbors(grid, cur)) {
-            if(key !in scores){
+            if (key !in scores) {
                 scores[key] = curScore + deltaScore
                 queue.add(key)
                 continue
             }
-            if(scores[key]!! > curScore + deltaScore){
+            if (scores[key]!! > curScore + deltaScore) {
                 scores[key] = curScore + deltaScore
                 queue.add(key)
             }
@@ -72,19 +72,19 @@ fun solveLevel2(grid: Grid): Long {
     queue.add(startPos to Vec2.RIGHT)
     scores[startPos to Vec2.RIGHT] = 0L
 
-    while(queue.isNotEmpty()){
+    while (queue.isNotEmpty()) {
         val cur = queue.remove()
         val curScore = scores[cur] ?: error("Not in scores")
 
 
         for ((key, deltaScore) in getNeighbors(grid, cur)) {
-            if(key !in scores){
+            if (key !in scores) {
                 scores[key] = curScore + deltaScore
                 parents[key] = mutableListOf(cur)
                 queue.add(key)
                 continue
             }
-            if(scores[key]!! > curScore + deltaScore){
+            if (scores[key]!! > curScore + deltaScore) {
                 scores[key] = curScore + deltaScore
                 parents[key]!!.let {
                     it.clear()
@@ -93,7 +93,7 @@ fun solveLevel2(grid: Grid): Long {
 
                 queue.add(key)
             }
-            if(scores[key]!! == curScore + deltaScore){
+            if (scores[key]!! == curScore + deltaScore) {
                 parents[key]!!.add(cur)
             }
         }
@@ -103,7 +103,7 @@ fun solveLevel2(grid: Grid): Long {
 
     val tiles = mutableSetOf<Vec2>()
     val keys = mutableSetOf<Pair<Vec2, Vec2>>(endKey)
-    while(keys.isNotEmpty()){
+    while (keys.isNotEmpty()) {
         val key = keys.first().also { keys.remove(it) }
         tiles.add(key.first)
         keys.addAll(parents[key] ?: emptySet())

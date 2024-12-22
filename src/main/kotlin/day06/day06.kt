@@ -1,7 +1,7 @@
 package day06
 
-import Vec2
 import Grid
+import Vec2
 import at
 import findCharInGrid
 import getInput

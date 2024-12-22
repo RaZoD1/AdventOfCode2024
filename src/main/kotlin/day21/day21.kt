@@ -1,6 +1,7 @@
 package day21
 
 import Vec2
+import day21.Button.entries
 import getInput
 import runLevels
 import kotlin.math.abs
@@ -57,19 +58,20 @@ data class Node(val move: Button, val nextMoves: List<Node>)
 
 
 sealed class KeypadController {
-    class Manual(): KeypadController() {
+    class Manual() : KeypadController() {
         override fun findCost(buttons: List<Button>): Long {
             return buttons.size.toLong()
         }
     }
 
-    class Robot(val controlledBy: KeypadController): KeypadController() {
+    class Robot(val controlledBy: KeypadController) : KeypadController() {
         override fun findCost(buttons: List<Button>): Long {
             return (listOf(Button.ACTIVATE) + buttons)
                 .map { button -> D_PAD[button]!! }
                 .zipWithNext()
-                .sumOf { (from, to) ->  fromToHitCost(from, to)}
+                .sumOf { (from, to) -> fromToHitCost(from, to) }
         }
+
         fun solveDiagonal(from: Vec2, delta: Vec2): Long {
 
             val possibilities = mutableListOf<Pair<Vec2, Vec2>>()
@@ -77,15 +79,19 @@ sealed class KeypadController {
             val dCol = delta.copy(row = 0)
             val dRow = delta.copy(col = 0)
 
-            if(from + dRow in D_PAD_VALUES){
+            if (from + dRow in D_PAD_VALUES) {
                 possibilities += Pair(dRow, dCol)
             }
-            if(from + dCol in D_PAD_VALUES){
+            if (from + dCol in D_PAD_VALUES) {
                 possibilities += Pair(dCol, dRow)
             }
 
             return possibilities.minOf { order ->
-                val buttonsToHit = listOf(dirToBtn.getValue(order.first.sign()),dirToBtn.getValue(order.second.sign()), Button.ACTIVATE)
+                val buttonsToHit = listOf(
+                    dirToBtn.getValue(order.first.sign()),
+                    dirToBtn.getValue(order.second.sign()),
+                    Button.ACTIVATE
+                )
                 return@minOf controlledBy.findCost(buttonsToHit) + (abs(delta.x) + abs(delta.y) - 2)
             }
         }
@@ -101,7 +107,7 @@ sealed class KeypadController {
             return cache.getOrPut(cacheKey) {
                 val delta = to - from
                 val (dx, dy) = delta
-                if(dx != 0 && dy != 0){
+                if (dx != 0 && dy != 0) {
                     solveDiagonal(from, delta)
                 } else {
                     solveStraight(from, delta)
@@ -118,10 +124,10 @@ sealed class KeypadController {
 class Keypad(val controlledBy: KeypadController) {
 
     fun findCost(buttons: List<Button>): Long {
-       return (listOf(Button.ACTIVATE) + buttons)
-           .map { button -> KEYPAD[button]!! }
-           .zipWithNext()
-           .sumOf { (from, to) ->  fromToHitCost(from, to)}
+        return (listOf(Button.ACTIVATE) + buttons)
+            .map { button -> KEYPAD[button]!! }
+            .zipWithNext()
+            .sumOf { (from, to) -> fromToHitCost(from, to) }
     }
 
     fun solveDiagonal(from: Vec2, delta: Vec2): Long {
@@ -131,15 +137,16 @@ class Keypad(val controlledBy: KeypadController) {
         val dCol = delta.copy(row = 0)
         val dRow = delta.copy(col = 0)
 
-        if(from + dRow in KEYPAD_VALUES){
+        if (from + dRow in KEYPAD_VALUES) {
             possibilities += Pair(dRow, dCol)
         }
-        if(from + dCol in KEYPAD_VALUES){
+        if (from + dCol in KEYPAD_VALUES) {
             possibilities += Pair(dCol, dRow)
         }
 
         return possibilities.minOf { order ->
-            val buttonsToHit = listOf(dirToBtn.getValue(order.first.sign()),dirToBtn.getValue(order.second.sign()), Button.ACTIVATE)
+            val buttonsToHit =
+                listOf(dirToBtn.getValue(order.first.sign()), dirToBtn.getValue(order.second.sign()), Button.ACTIVATE)
             return@minOf controlledBy.findCost(buttonsToHit) + (abs(delta.x) + abs(delta.y) - 2)
         }
     }
@@ -152,7 +159,7 @@ class Keypad(val controlledBy: KeypadController) {
     fun fromToHitCost(from: Vec2, to: Vec2): Long {
         val delta = to - from
         val (dx, dy) = delta
-        return if(dx != 0 && dy != 0){
+        return if (dx != 0 && dy != 0) {
             solveDiagonal(from, delta)
         } else {
             solveStraight(from, delta)
@@ -171,13 +178,10 @@ val dirToBtn = mapOf<Vec2, Button>(
 
 fun findCodeComplexity(code: String, keypad: Keypad): Long {
     val numericCodePart = code.takeWhile { c -> c.isDigit() }.toLong()
+
     val buttons = code.map { c -> Button.lookup(c) ?: error("Code contains unknown Button $c") }
-
-
-
     val typingCost = keypad.findCost(buttons)
 
-    println("\nFor code $code: Cost $typingCost  Numeric Part $numericCodePart")
     return numericCodePart * typingCost
 }
 
@@ -187,7 +191,7 @@ fun solveLevel1(codes: List<String>): Long {
     val c2 = KeypadController.Robot(c1)
     val keypad = Keypad(c2)
 
-    return codes.sumOf {findCodeComplexity(it, keypad)}
+    return codes.sumOf { findCodeComplexity(it, keypad) }
 }
 
 
@@ -195,13 +199,13 @@ fun solveLevel2(codes: List<String>): Long {
     val manualController = KeypadController.Manual()
     var controlledBy: KeypadController = manualController
 
-    for(i in 1..25){
+    for (i in 1..25) {
         controlledBy = KeypadController.Robot(controlledBy)
     }
 
     val keypad = Keypad(controlledBy)
 
-    return codes.sumOf {findCodeComplexity(it, keypad)}
+    return codes.sumOf { findCodeComplexity(it, keypad) }
 }
 
 
@@ -216,6 +220,6 @@ fun main() {
         21,
         { solveLevel1(codes) },
         { solveLevel2(codes) },
-        times = 1
+        times = 100
     )
 }
